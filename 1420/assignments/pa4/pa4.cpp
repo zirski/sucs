@@ -74,7 +74,7 @@ int DisplayMenu() {
   // Handy input validation control flow used ubiquitously througout the
   // program. Firstly, checks if cin can read into its variable with no errors;
   // if it can't give the user an error message and try again. cin.clear()
-  // clears all state flags which might have been tripped during the function,
+  // clears all state flags which might have been tripped during the cin call,
   // and fflush(stdin) flushes the buffer.
   while (true) {
     if (cin >> input && input > 0 && input < 6) {
