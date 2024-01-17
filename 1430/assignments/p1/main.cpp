@@ -12,6 +12,9 @@ int main() {
   bool won = false;
   string filename;
 
+  for (int i = 0; i < 19; i++)
+    cout << endl;
+
   cout << "## Welcome to Hangman! ##" << endl << endl;
   cout << "Here's how it works: the game will choose a word at random (from a "
           "list you"
@@ -38,7 +41,8 @@ int main() {
   // main game flow
   if (input == 'y') {
     cout << "Enter word file: ";
-    cin >> filename;
+    // cin >> filename;
+    filename = "p1input.dat";
     if (!game.initializeFile(filename)) {
       cout << "file problem... exiting" << endl;
       return 1;
@@ -46,49 +50,44 @@ int main() {
       cout << "File loaded OK" << endl << endl;
     }
 
-    while (input != 'y' && input != 'n') {
-      cout << "Please enter a valid choice (y/n): ";
-      cin.clear();
-      fflush(stdin);
-      cin.get(input);
-    }
-
-    char playAgain = 'y'; // will either be 'y' or 'n'
+    char playAgain; // will either be 'y' or 'n'
     do {
-      game.setState(0);
       game.displayStatistics();
-      game.newWord();
       game.displayGame();
 
       done = false;
       won = false;
 
       while (!done) {
-        game.setState(1);
-        cout << "What letter? ";
+        cout << "Enter guess: ";
         cin >> letter;
         game.guess(toupper(letter), done, won);
+        if (done)
+          game.revealWord();
         game.displayGame();
       }
 
-      game.setState(2);
-      game.revealWord();
       if (won)
         cout << "You won!" << endl;
       else
         cout << "You lost :(" << endl;
 
-      cout << "Play again? (y/n): ";
+      if (!game.newWord()) {
+        cout << "Out of words! Thanks for playing!";
+        return 0;
+      } else {
+        cout << "Play again? (y/n): ";
 
-      fflush(stdin);
-      cin.get(playAgain);
-      while (playAgain != 'y' && playAgain != 'n') {
-        cout << "Please enter a valid choice (y/n): ";
-        cin.clear();
         fflush(stdin);
         cin.get(playAgain);
+        while (playAgain != 'y' && playAgain != 'n') {
+          cout << "Please enter a valid choice (y/n): ";
+          cin.clear();
+          fflush(stdin);
+          cin.get(playAgain);
+        }
       }
     } while (playAgain == 'y');
   } else
-    exit(0);
+    return 0;
 }

@@ -19,7 +19,6 @@ public:
   void displayGame();
   bool guess(char letter, bool &done, bool &won);
   void revealWord();
-  void setState(int state);
 
 private:
   // Constants

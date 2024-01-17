@@ -57,11 +57,13 @@ bool Hangman::initializeFile(string filename) {
     // the list.
     shuffle(begin(words), &words[i], g);
     wordsLeft = i;
+    activeWord = words[0];
     return true;
   }
 }
 
 void Hangman::displayStatistics() {
+  state = INTRO;
   cout << "Wins: " << wins << endl;
   cout << "Losses: " << losses << endl;
   cout << "Words guessed: " << wordsGuessed << endl;
@@ -69,10 +71,14 @@ void Hangman::displayStatistics() {
 }
 
 bool Hangman::newWord() {
+  badGuesses = 0;
+  for (int i = 0; i < ALPHA_SIZE; i++) {
+    alphabet[i].guessed = false;
+  }
   if (wordsLeft == 0)
     return false;
   else {
-    int ct = -1;
+    int ct = 0;
     // iterates through list of words until it finds one that hasn't been used
     do {
       activeWord = words[++ct];
@@ -159,6 +165,7 @@ void Hangman::displayGame() {
 }
 
 bool Hangman::guess(char letter, bool &done, bool &won) {
+  state = GAME;
   won = true;
   bool correctGuess = false;
   // Iterate through each letter of the active word
@@ -178,7 +185,9 @@ bool Hangman::guess(char letter, bool &done, bool &won) {
         won = false;
     }
   }
+  // If game is won
   if (won) {
+    state = END;
     wins++;
     // I really don't know another way to end the game even if we have won; in
     // the assignment description it just says that done should be true only if
@@ -190,9 +199,11 @@ bool Hangman::guess(char letter, bool &done, bool &won) {
   // letter guessed previously.
   if (!correctGuess && !alphabet[letter - 'A'].guessed) {
     badGuesses++;
+    // If game is lost
     if (badGuesses == 7) {
-      done = true;
+      state = END;
       losses++;
+      done = true;
     }
     alphabet[letter - 'A'].guessed = true;
     return true;
@@ -207,26 +218,6 @@ bool Hangman::guess(char letter, bool &done, bool &won) {
 void Hangman::revealWord() {
   for (int i = 0; i < (int)activeWord.refWord.length(); i++) {
     activeWord.word[i].guessed = true;
-  }
-  displayGame();
-
-  for (int i = 0; i < ALPHA_SIZE; i++) {
-    alphabet[i].guessed = false;
-  }
-  badGuesses = 0;
-}
-
-void Hangman::setState(int s) {
-  switch (s) {
-  case 0:
-    state = INTRO;
-    break;
-  case 1:
-    state = GAME;
-    break;
-  case 2:
-    state = END;
-    break;
   }
 }
 
