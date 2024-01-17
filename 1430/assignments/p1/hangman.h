@@ -19,6 +19,7 @@ public:
   void displayGame();
   bool guess(char letter, bool &done, bool &won);
   void revealWord();
+  void setState(int state);
 
 private:
   // Constants
@@ -31,6 +32,8 @@ private:
   static const int MAX_ASCII_SIZE = 4;
   static const int HANGMAN_LINE_WIDTH = 7;
   static const int MAX_WORD_SIZE = 13;
+  static const int GAME_UPPER_SCREEN_HEIGHT = 5;
+  static const int NUM_STATS_LINES = 4;
 
   // Variables
   int wins;
@@ -39,7 +42,8 @@ private:
   int wordsLeft;
   int badGuesses;
 
-  // Structs
+  // Defined Types
+  enum gameState { INTRO, GAME, END };
   struct Letter {
     Letter() : letter(0), guessed(false) {}
     char letter;
@@ -58,7 +62,8 @@ private:
     string ascii[MAX_ASCII_SIZE];
   };
 
-  // Struct implementations
+  // Type implementations
+  gameState state;
   Hline gallows[8];
   Word activeWord;
   Word words[MAX_LIST_SIZE];
