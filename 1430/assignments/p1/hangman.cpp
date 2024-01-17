@@ -17,8 +17,8 @@ Hangman::Hangman() {
   wins = 0;
   losses = 0;
   wordsGuessed = 0;
-  wordsLeft = MAX_LIST_SIZE;
   badGuesses = 0;
+  state = INTRO;
 
   // Populate the alphabet array with letters
   char letter = 'A';
@@ -56,6 +56,7 @@ bool Hangman::initializeFile(string filename) {
     // only once per boot, we can run only as many games as there are words in
     // the list.
     shuffle(begin(words), &words[i], g);
+    wordsLeft = i;
     return true;
   }
 }
@@ -85,30 +86,76 @@ bool Hangman::newWord() {
 
 // Fits perfectly on 80x24 size screen!
 void Hangman::displayGame() {
-  cout << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
+  switch (state) {
+  case INTRO:
+    for (int i = 0; i < GAME_UPPER_SCREEN_HEIGHT - NUM_STATS_LINES; i++)
+      cout << endl;
 
-  displayGallows(badGuesses); // 8 lines
+    displayGallows(badGuesses); // 8 lines
 
-  cout << endl;
-  cout << endl;
-  cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
 
-  displayWord(); // one line
+    displayWord(); // one line
 
-  cout << endl;
-  cout << endl;
-  cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
 
-  displayAlpha(); // one line
+    displayAlpha(); // one line
 
-  cout << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    break;
+  case GAME:
+    for (int i = 0; i < GAME_UPPER_SCREEN_HEIGHT; i++)
+      cout << endl;
+
+    displayGallows(badGuesses); // 8 lines
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+    displayWord(); // one line
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+    displayAlpha(); // one line
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    break;
+  case END:
+    for (int i = 0; i < GAME_UPPER_SCREEN_HEIGHT; i++)
+      cout << endl;
+
+    displayGallows(badGuesses); // 8 lines
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+    displayWord(); // one line
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+
+    displayAlpha(); // one line
+
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    break;
+  }
 }
 
 bool Hangman::guess(char letter, bool &done, bool &won) {
@@ -120,7 +167,7 @@ bool Hangman::guess(char letter, bool &done, bool &won) {
     // compare it with the current guess.
     if (!activeWord.word[i].guessed) {
       // if at any point there's a match, we have a correct guess!
-      if (activeWord.word[i].letter == toupper(letter)) {
+      if (activeWord.word[i].letter == letter) {
         // mark the current letter as already guessed so that we can ignore it
         // in future passes
         activeWord.word[i].guessed = true;
@@ -161,11 +208,26 @@ void Hangman::revealWord() {
   for (int i = 0; i < (int)activeWord.refWord.length(); i++) {
     activeWord.word[i].guessed = true;
   }
+  displayGame();
+
   for (int i = 0; i < ALPHA_SIZE; i++) {
     alphabet[i].guessed = false;
   }
-  displayGame();
   badGuesses = 0;
+}
+
+void Hangman::setState(int s) {
+  switch (s) {
+  case 0:
+    state = INTRO;
+    break;
+  case 1:
+    state = GAME;
+    break;
+  case 2:
+    state = END;
+    break;
+  }
 }
 
 // To any future readers of this method, I apologize in advance.
