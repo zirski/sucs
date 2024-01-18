@@ -91,6 +91,8 @@ int main() {
         }
       }
     } while (playAgain == 'y');
-  } else
+  } else {
+    cout << "Thanks for playing!" << endl;
     return 0;
+  }
 }
