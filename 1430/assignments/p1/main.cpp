@@ -12,6 +12,7 @@ int main() {
   bool won = false;
   string filename;
 
+  // formatting
   for (int i = 0; i < 19; i++)
     cout << endl;
 
@@ -38,11 +39,9 @@ int main() {
     fflush(stdin);
     cin.get(input);
   }
-  // main game flow
   if (input == 'y') {
     cout << "Enter word file: ";
-    // cin >> filename;
-    filename = "p1input.dat";
+    cin >> filename;
     if (!game.initializeFile(filename)) {
       cout << "file problem... exiting" << endl;
       return 1;
@@ -51,6 +50,10 @@ int main() {
     }
 
     char playAgain; // will either be 'y' or 'n'
+    // Main game loop: display statistics at first, then prompt for the user's
+    // guess, displaying the updated game after every guess. When the game
+    // finishes, prompt them if they want to play again. If they run out of
+    // words, tell them thanks for playing and end the program.
     do {
       game.displayStatistics();
       game.displayGame();
