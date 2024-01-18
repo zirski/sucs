@@ -1,3 +1,9 @@
+// Toby Hammond
+// p1.cpp
+// Purpose: Engine for Hangman! This runs a singular Hangman instance on the
+// command line; displays welcome and goodbye messages and prompts user for a
+// file of words for the game to use.
+
 #include "hangman.h"
 #include <cstdio>
 #include <cstdlib>

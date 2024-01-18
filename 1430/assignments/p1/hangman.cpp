@@ -1,6 +1,6 @@
 // Toby Hammond
 // hangman.cpp
-// Purpose: runs hangman game
+// Purpose: Implementation for Hangman class.
 
 #include "hangman.h"
 #include <algorithm>

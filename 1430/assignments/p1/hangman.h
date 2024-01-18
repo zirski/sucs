@@ -1,6 +1,7 @@
 // Toby Hammond
 // hangman.h
-// Purpose: Hangman class
+// Purpose: Hangman class. Takes a list of words from a file, and using one word
+// at a time, runs a game of hangman.
 
 #include <random>
 #include <string>
