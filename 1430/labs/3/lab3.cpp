@@ -55,6 +55,7 @@ int main() {
   for (int i = 0; i < size; i++) {
     cout << ptrvar[i] << " ";
   }
+  cout << endl;
 
   // Step 11
   delete[] ptrvar;
