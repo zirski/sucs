@@ -70,7 +70,7 @@ void insertInOrder(Node *&h, int d) {
 
 void printList(Node *h) {
   Node *temp = h;
-  while (temp->next != nullptr) {
+  while (temp != nullptr) {
     cout << temp->data << endl;
     temp = temp->next;
   }
