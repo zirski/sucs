@@ -1,10 +1,15 @@
+// Toby Hammond
+// lab6.cpp
+// Linked list duplicate remover. Takes a file of integers, sorts them into a
+// singly linked list in ascending order, then removes all duplicate values from
+// the list.
+
 #include <fstream>
 #include <iostream>
 
 using namespace std;
 
-// const string FILENAME = "/home/fac/sreeder/class/cs1430/lab6.dat";
-const string FILENAME = "lab6.dat";
+const string FILENAME = "/home/fac/sreeder/class/cs1430/lab6.dat";
 
 struct Node {
   int data;
