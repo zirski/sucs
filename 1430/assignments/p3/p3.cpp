@@ -35,7 +35,8 @@ int main()
   string filename;
   Node* list = nullptr;
 
-  for (int i = 0; i < SCREEN_WIDTH; i++) cout << "-";
+  for (int i = 0; i < SCREEN_WIDTH; i++)
+    cout << "-";
 
   cout << endl
        << "Professor Potter has given you a scrambled message, contained "
@@ -45,7 +46,8 @@ int main()
           "read the message back"
        << endl
        << "to you." << endl;
-  for (int i = 0; i < SCREEN_WIDTH; i++) cout << "-";
+  for (int i = 0; i < SCREEN_WIDTH; i++)
+    cout << "-";
 
   // Main gameplay loop
   char playAgain;
