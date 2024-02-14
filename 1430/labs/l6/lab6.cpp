@@ -66,8 +66,8 @@ void removeDups(Node *h) {
   else {
     Node *temp = h;
     while (temp != nullptr) {
+      Node *scout = temp->next;
       while (temp->next != nullptr && temp->next->data == temp->data) {
-        Node *scout = temp->next;
         temp->next = scout->next;
         delete scout;
       }
