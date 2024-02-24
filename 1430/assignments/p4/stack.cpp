@@ -48,7 +48,7 @@ char Stack::pop()
 
 bool Stack::isEmpty()
 {
-  return !(top == 0);
+  return top == 0;
 }
 
 void Stack::resize()
