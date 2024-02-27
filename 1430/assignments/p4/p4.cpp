@@ -150,7 +150,7 @@ int main()
   cout << "q1:" << endl;
   print(q1);
   SLEEP(LONG_SLEEP);
-  cout << "Tests complete!" << endl;
+  cout << "Tests complete!" << endl << endl;
   return 0;
 }
 
