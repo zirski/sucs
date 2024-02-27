@@ -20,6 +20,7 @@ using namespace std;
 const int INITIAL_NUM_CHARS = 20;
 const int NEW_NUM_CHARS = 30;
 const int SHORT_SLEEP = 50;
+const int MED_SLEEP = 400;
 const int LONG_SLEEP = 1200;
 
 void print(Stack& s);
@@ -48,7 +49,7 @@ int main()
 
   cout << "Creating Stack s1" << endl;
   Stack s1;
-  SLEEP(400);
+  SLEEP(MED_SLEEP);
 
   cout << "Populating s1 with 25 random chars: ";
   for (int i = 0; i < INITIAL_NUM_CHARS; i++) {
@@ -107,7 +108,7 @@ int main()
 
   cout << "Creating Queue q1" << endl;
   Queue q1;
-  SLEEP(400);
+  SLEEP(MED_SLEEP);
 
   cout << "Populating q1 with 25 random chars: ";
   for (int i = 0; i < INITIAL_NUM_CHARS; i++) {

@@ -1,6 +1,6 @@
 // Toby Hammond
 // stack.h
-// Purpose: Dynamic array-implemented stack. Can be resized in the event of
+// Purpose: Dynamic array-implemented stack. Is resized in the event of
 // stack overflow. isEmpty is available to the user, but methods within this
 // class throw emptyStackException when needed anyway.
 
