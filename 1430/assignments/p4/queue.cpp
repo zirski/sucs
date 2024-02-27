@@ -1,3 +1,7 @@
+// Toby Hammond
+// queue.h
+// Purpose: Linked list-implemented queue.
+
 #include "queue.h"
 
 #include <cstddef>
