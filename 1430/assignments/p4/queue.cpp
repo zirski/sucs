@@ -68,7 +68,7 @@ void Queue::enqueue(char c)
   insert->c = c;
   insert->next = nullptr;
 
-  if (h == t) {
+  if (h == nullptr) {
     h = insert;
     t = insert;
   } else {
@@ -81,8 +81,8 @@ char Queue::dequeue()
 {
   if (h == nullptr)
     throw emptyQueueException();
-  Node* d = h;
   char c = h->c;
+  Node* d = h;
   h = h->next;
   delete d;
   return c;

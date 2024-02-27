@@ -17,10 +17,11 @@ Stack& Stack::operator=(const Stack& rhs)
   if (this != &rhs) {
     delete[] arr;
     size = rhs.size;
+    top = rhs.top;
     arr = new char[size];
 
     for (int i = 0; i < size; i++)
-      arr[i] = rhs.arr[size];
+      arr[i] = rhs.arr[i];
   }
   return *this;
 }
