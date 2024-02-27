@@ -1,3 +1,7 @@
+// Toby Hammond
+// stack.cpp
+// Purpose: Dynamic array-implemented stack.
+
 #include "stack.h"
 
 Stack::Stack() : size(DEFAULT_SIZE), top(0)
