@@ -9,42 +9,43 @@
 
 using namespace std;
 
-bool isPal(string word);
+bool isPal(string text);
+string sanitizeLine(string line);
 
 int main()
 {
   // TODO: change filepath
-  // ifstream in("/home/fac/sreeder/class/cs1430/p5.dat");
-  ifstream in("p5.dat");
+  // ifstream in("/home/fac/sreeder/class/cs1430/p5x.dat");
+  ifstream in("p5x.dat");
   if (!in) {
     cerr << "Error opening file" << endl;
     return 1;
   }
 
-  string word;
-  int numWords = 0, numPals = 0;
-  while (in >> word) {
-    if (isPal(word)) {
-      cout << word << " is a palindrome." << endl;
+  string line;
+  int numPhrases = 0, numPals = 0;
+  while (getline(in, line) && !line.empty()) {
+    if (isPal(sanitizeLine(line))) {
+      cout << "\"\033[32m" << line << "\033[37m\" is a palindrome." << endl;
       numPals++;
     } else {
-      cout << word << " is not a palindrome." << endl;
+      cout << "\"" << line << "\" is not a palindrome." << endl;
     }
-    numWords++;
+    numPhrases++;
   }
 
-  cout << endl << "Number of words read: " << numWords << endl;
+  cout << endl << "Number of words read: " << numPhrases << endl;
   cout << "Number of palindromes found: " << numPals << endl;
   return 0;
 }
 
-bool isPal(string word)
+bool isPal(string text)
 {
   Queue forward;
   Stack reverse;
 
-  for (int i = 0; i < word.length(); i++) {
-    char c = tolower(word[i]);
+  for (int i = 0; i < text.length(); i++) {
+    char c = tolower(text[i]);
     forward.enqueue(c);
     reverse.push(c);
   }
@@ -54,4 +55,12 @@ bool isPal(string word)
     if (forward.dequeue() != reverse.pop())
       match = false;
   return match;
+}
+
+string sanitizeLine(string line)
+{
+  for (size_t i = 0; i < line.length(); i++)
+    if (isspace(line.at(i)) || ispunct(line.at(i)))
+      line.erase(i, 1);
+  return line;
 }
