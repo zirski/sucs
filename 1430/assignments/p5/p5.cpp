@@ -13,9 +13,8 @@ bool isPal(string word);
 
 int main()
 {
-  // TODO: change filepath
-  // ifstream in("/home/fac/sreeder/class/cs1430/p5.dat");
-  ifstream in("p5.dat");
+  ifstream in("/home/fac/sreeder/class/cs1430/p5.dat");
+  // ifstream in("p5.dat");
   if (!in) {
     cerr << "Error opening file" << endl;
     return 1;
@@ -43,7 +42,7 @@ bool isPal(string word)
   Queue forward;
   Stack reverse;
 
-  for (int i = 0; i < word.length(); i++) {
+  for (size_t i = 0; i < word.length(); i++) {
     char c = tolower(word[i]);
     forward.enqueue(c);
     reverse.push(c);
