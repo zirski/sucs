@@ -14,9 +14,7 @@ string sanitizeLine(string line);
 
 int main()
 {
-  // TODO: change filepath
-  // ifstream in("/home/fac/sreeder/class/cs1430/p5x.dat");
-  ifstream in("p5x.dat");
+  ifstream in("/home/fac/sreeder/class/cs1430/p5x.dat");
   if (!in) {
     cerr << "Error opening file" << endl;
     return 1;
@@ -44,7 +42,7 @@ bool isPal(string text)
   Queue forward;
   Stack reverse;
 
-  for (int i = 0; i < text.length(); i++) {
+  for (size_t i = 0; i < text.length(); i++) {
     char c = tolower(text[i]);
     forward.enqueue(c);
     reverse.push(c);
