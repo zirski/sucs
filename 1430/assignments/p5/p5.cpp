@@ -1,3 +1,9 @@
+// Toby Hammond
+// p5.cpp
+// Purpose: Palindrome detector. Takes a user-submitted filepath, and for each
+// word in this file determines whether the word is a palindrome. Returns the
+// list of words, with palindromes noted and highlighted in green.
+
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -30,7 +36,7 @@ int main()
     // ifstream in("/home/fac/sreeder/class/cs1430/p5x.dat");
     ifstream in(finput);
     if (!in) {
-      perror("Error"); 
+      perror("Error");
       return 1;
     }
     processWords(in);
