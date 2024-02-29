@@ -30,7 +30,7 @@ int main()
     // ifstream in("/home/fac/sreeder/class/cs1430/p5x.dat");
     ifstream in(finput);
     if (!in) {
-      cerr << "Error: " << strerror(errno) << endl;
+      perror("Error"); 
       return 1;
     }
     processWords(in);
