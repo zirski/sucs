@@ -11,8 +11,7 @@
 using namespace std;
 
 const int LIST_SIZE = 50;
-// const string FILENAME = "/home/fac/sreeder/class/cs1430/lab9.dat";
-const string FILENAME = "lab9.dat";
+const string FILENAME = "/home/fac/sreeder/class/cs1430/lab9.dat";
 
 void printArray(string arr[], int numElements);
 // Insertion sort
@@ -68,7 +67,7 @@ int main()
 void printArray(string arr[], int numElements)
 {
   cout << "Index  Value" << endl;
-  for (size_t i = 0; i < numElements; i++)
+  for (int i = 0; i < numElements; i++)
     cout << left << setw(2) << i << "     " << arr[i] << endl;
 }
 
