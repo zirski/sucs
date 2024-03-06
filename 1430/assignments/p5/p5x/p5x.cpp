@@ -73,7 +73,7 @@ string sanitizeLine(string line)
 {
   for (size_t i = 0; i < line.length(); i++)
     if (isspace(line.at(i)) || ispunct(line.at(i)))
-      line.erase(i, 1);
+      line.erase(i--, 1);
   return line;
 }
 
@@ -83,7 +83,7 @@ void processLines(ifstream& in)
   int numPhrases = 0, numPals = 0;
 
   cout << endl;
-  while (getline(in, line) && !line.empty()) {
+  while (getline(in, line) && !sanitizeLine(line).empty()) {
     if (isPal(sanitizeLine(line))) {
       cout << "\"\033[32m" << line << "\033[37m\" is a palindrome." << endl;
       numPals++;
