@@ -13,17 +13,18 @@ const string FILENAME = "/home/fac/sreeder/class/cs1430/lab6.dat";
 
 struct Node {
   int data;
-  Node *next;
+  Node* next;
 };
 
-void initList(Node *&h);
-void insertInOrder(Node *&h, int d);
-void removeDups(Node *h);
-void printList(Node *h);
-void deleteList(Node *&h);
+void initList(Node*& h);
+void insertInOrder(Node*& h, int d);
+void removeDups(Node* h);
+void printList(Node* h);
+void deleteList(Node*& h);
 
-int main() {
-  Node *h = nullptr;
+int main()
+{
+  Node* h = nullptr;
   initList(h);
   cout << "file read OK" << endl << endl;
   printList(h);
@@ -32,7 +33,8 @@ int main() {
   deleteList(h);
 }
 
-void initList(Node *&h) {
+void initList(Node*& h)
+{
   ifstream in(FILENAME);
 
   int num;
@@ -41,8 +43,9 @@ void initList(Node *&h) {
   }
 }
 
-void insertInOrder(Node *&h, int d) {
-  Node *insert = new Node;
+void insertInOrder(Node*& h, int d)
+{
+  Node* insert = new Node;
   insert->data = d;
   insert->next = nullptr;
 
@@ -52,7 +55,7 @@ void insertInOrder(Node *&h, int d) {
     insert->next = h;
     h = insert;
   } else {
-    Node *temp = h;
+    Node* temp = h;
     while (temp->next != nullptr && temp->next->data < insert->data)
       temp = temp->next;
     insert->next = temp->next;
@@ -60,13 +63,14 @@ void insertInOrder(Node *&h, int d) {
   }
 }
 
-void removeDups(Node *h) {
+void removeDups(Node* h)
+{
   if (h == nullptr)
     return;
   else {
-    Node *temp = h;
+    Node* temp = h;
     while (temp != nullptr) {
-      Node *scout = temp->next;
+      Node* scout = temp->next;
       while (temp->next != nullptr && temp->next->data == temp->data) {
         temp->next = scout->next;
         delete scout;
@@ -76,8 +80,9 @@ void removeDups(Node *h) {
   }
 }
 
-void printList(Node *h) {
-  Node *temp = h;
+void printList(Node* h)
+{
+  Node* temp = h;
   while (temp != nullptr) {
     cout << temp->data << endl;
     temp = temp->next;
@@ -85,8 +90,9 @@ void printList(Node *h) {
   cout << endl;
 }
 
-void deleteList(Node *&h) {
-  Node *del;
+void deleteList(Node*& h)
+{
+  Node* del;
   while (h != nullptr) {
     del = h;
     h = h->next;
