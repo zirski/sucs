@@ -77,6 +77,7 @@ void sortList(Person arr[], int size)
       Person tmp = arr[index];
       arr[index] = arr[index - 1];
       arr[index - 1] = tmp;
+      index--;
     }
   }
 }
