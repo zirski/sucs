@@ -73,7 +73,7 @@ void sortList(Person arr[], int size)
 {
   for (int i = 1; i < size; i++) {
     int index = i;
-    while (index > 0 && arr[index].name > arr[index - 1].name) {
+    while (index > 0 && arr[index].name < arr[index - 1].name) {
       Person tmp = arr[index];
       arr[index] = arr[index - 1];
       arr[index - 1] = tmp;
