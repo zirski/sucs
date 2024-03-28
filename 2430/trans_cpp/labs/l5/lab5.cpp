@@ -42,7 +42,10 @@ int main()
   printRecord(findSmallestCoffeeIntake(list, ct));
   cout << endl;
   printList(list, ct);
-  cout << "Sorting list..." << endl;
+  cout << "Sorting list..." << endl
+       << "--------------------------------------------------------------------"
+          "------------"
+       << endl;
   sortList(list, ct);
   cout << endl;
   printList(list, ct);
