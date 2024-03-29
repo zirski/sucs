@@ -31,11 +31,11 @@ void bico(int n, int i)
   int size = 1;
   // Array for storing the base (and later reference) line.
   int* line = new int[size];
+  line[0] = 1;
+  printList(line, size);
   // Array which adds up value pairs from line[], adhering to pascal's triangle
   // rules.
   int* next = new int[++size];
-  line[0] = 1;
-  printList(line, size);
   for (int i = 0; i < n; i++) {
     // For each element in next[], add the equivalent value from line[] and the
     // equivalent value - 1. If calculating for the first or last element,
@@ -64,6 +64,6 @@ void bico(int n, int i)
 void printList(int arr[], int size)
 {
   for (int i = 0; i < size; i++)
-    cout << setw(2) << arr[i] << " ";
+    cout << left << setw(2) << arr[i] << " ";
   cout << endl;
 }
