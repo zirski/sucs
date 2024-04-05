@@ -4,7 +4,6 @@
 // dogs, into which users can put up pets for adoption or choose either a cat or
 // dog to adopt (or simply the first pet added to the db).
 
-#include <cstdio>
 #include <iostream>
 #include <iterator>
 #include <string>
