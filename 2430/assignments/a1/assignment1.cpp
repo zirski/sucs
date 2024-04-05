@@ -4,6 +4,7 @@
 // dogs, into which users can put up pets for adoption or choose either a cat or
 // dog to adopt (or simply the first pet added to the db).
 
+#include <cstdio>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -36,11 +37,8 @@ int main()
     cout << "6. Exit" << endl << ":";
 
     cin >> choice;
-
-    // Eliminates the whitespace left by cin; not sure that this is the
-    // best-practice method but I did not readily find any alternatives which
-    // immeditely worked
-    fflush(stdin);
+    string dummy;
+    getline(cin, dummy);
 
     switch (choice) {
       case 1: {
@@ -117,13 +115,14 @@ bool adopt(vector<Pet>& l, string c, Pet& p)
 {
   if (!l.empty()) {
     vector<Pet>::iterator it = l.begin();
-    // Steps through vector until it encounters the first instance of the desire
+    // Steps through vector until it encounters the first instance of the desired
     // pet type
-    while (it->type != c)
+    while (it->type != c) {
+      // If not found
+      if (it == l.end())
+        return false;
       it++;
-    // If not found
-    if (it == l.end())
-      return false;
+    }
     p = *it;
     l.erase(l.begin());
     return true;
