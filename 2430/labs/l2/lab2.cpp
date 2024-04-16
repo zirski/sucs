@@ -2,16 +2,18 @@
 // lab2.cpp
 // Purpose: prints a Pascal's triangle using iterative and recursive techniques,
 // and allows the user to ask for a value in the last row of the triangle.
+// Measures time complexity of program.
 
 #include <chrono>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
 using namespace std::chrono;
 using namespace std;
 
-// const int NUM_TESTS = 21;
-// const int AVG_SAMPLE_SIZE = 100;
+const int NUM_TESTS = 51;
+const int AVG_SAMPLE_SIZE = 100000;
 
 // Iteratively populates a 2d array containing a
 // pascal's triangle, the width and height of the array being d elements wide
@@ -29,80 +31,74 @@ void printList(int** arr, int size);
 
 int main()
 {
-  int index, degree;
+  // int index, degree;
   int** triangle = nullptr;
 
-  cout << "Iterative Test: Please input the degree of the binomial: ";
-  cin >> degree;
-  cout << "Please input the desired index: ";
-  cin >> index;
-  while (index >= degree) {
-    cout << "Error: not a valid index. Try again: ";
-    cin >> index;
+  ofstream out("tests.csv");
+
+  out << "degree,iterative(ns),recursive(ns)" << endl;
+  for (int i = 0; i < NUM_TESTS; i++) {
+    int avgSum = 0;
+
+    for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
+      auto start = high_resolution_clock::now();
+      triangle = iterativePascal(i);
+      auto stop = high_resolution_clock::now();
+
+      avgSum += duration_cast<nanoseconds>(stop - start).count();
+    }
+
+    out << i << "," << avgSum / AVG_SAMPLE_SIZE << endl;
+    avgSum = 0;
+
+    for (int j = 0; j < i; j++)
+      delete[] triangle[j];
+    delete[] triangle;
+
+    // for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
+    //   auto start = high_resolution_clock::now();
+    //   triangle = recursivePascal(i);
+    //   auto stop = high_resolution_clock::now();
+
+    //   avgSum += duration_cast<nanoseconds>(stop - start).count();
+    // }
+
+    // out << avgSum / AVG_SAMPLE_SIZE << endl;
+
+    // for (int j = 0; j < i; j++)
+    //   delete[] triangle[j];
+    // delete[] triangle;
   }
 
-  cout << "Lab 1, iterative pascal triangle:" << endl;
-  triangle = iterativePascal(degree);
-  printList(triangle, degree);
-
-  cout << "The result is: " << triangle[degree - 1][index] << endl << endl;
-
-  for (int i = 0; i < degree; i++)
-    delete[] triangle[i];
-  delete[] triangle;
-  triangle = nullptr;
-
-  cout << "Lab 2, recursive pascal triangle:" << endl;
-  triangle = recursivePascal(degree);
-  printList(triangle, degree);
-  cout << "The result is: " << triangle[degree - 1][index] << endl;
-
-  for (int i = 0; i < degree; i++)
-    delete[] triangle[i];
-  delete[] triangle;
-  triangle = nullptr;
-
-  // cout << endl << "Iterative tests:" << endl;
-  // for (int i = 0; i < NUM_TESTS; i++) {
-  //   int avgSum = 0;
-
-  //   for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
-  //     auto start = high_resolution_clock::now();
-  //     triangle = iterativePascal(i);
-  //     auto stop = high_resolution_clock::now();
-
-  //     avgSum += duration_cast<nanoseconds>(stop - start).count();
-  //   }
-
-  //   cout << "iterativePascal(" << i << "): " << avgSum / AVG_SAMPLE_SIZE <<
-  //   "ns"
-  //        << endl;
-
-  //   for (int j = 0; j < i; j++)
-  //     delete[] triangle[j];
-  //   delete[] triangle;
+  // cout << "Iterative Test: Please input the degree of the binomial: ";
+  // cin >> degree;
+  // cout << "Please input the desired index: ";
+  // cin >> index;
+  // while (index >= degree) {
+  //   cout << "Error: not a valid index. Try again: ";
+  //   cin >> index;
   // }
 
-  // cout << endl << "Recursive tests:" << endl;
-  // for (int i = 0; i < NUM_TESTS; i++) {
-  //   int avgSum = 0;
+  // cout << "Lab 1, iterative pascal triangle:" << endl;
+  // triangle = iterativePascal(degree);
+  // printList(triangle, degree);
 
-  //   for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
-  //     auto start = high_resolution_clock::now();
-  //     triangle = recursivePascal(i);
-  //     auto stop = high_resolution_clock::now();
+  // cout << "The result is: " << triangle[degree - 1][index] << endl << endl;
 
-  //     avgSum += duration_cast<nanoseconds>(stop - start).count();
-  //   }
+  // for (int i = 0; i < degree; i++)
+  //   delete[] triangle[i];
+  // delete[] triangle;
+  // triangle = nullptr;
 
-  //   cout << "recursivePascal(" << i << "): " << avgSum / AVG_SAMPLE_SIZE <<
-  //   "ns"
-  //        << endl;
+  // cout << "Lab 2, recursive pascal triangle:" << endl;
+  // triangle = recursivePascal(degree);
+  // printList(triangle, degree);
+  // cout << "The result is: " << triangle[degree - 1][index] << endl;
 
-  //   for (int j = 0; j < i; j++)
-  //     delete[] triangle[j];
-  //   delete[] triangle;
-  // }
+  // for (int i = 0; i < degree; i++)
+  //   delete[] triangle[i];
+  // delete[] triangle;
+  // triangle = nullptr;
 
   return 0;
 }
