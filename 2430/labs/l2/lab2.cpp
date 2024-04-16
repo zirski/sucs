@@ -48,7 +48,7 @@ int main()
     //   avgSum += duration_cast<nanoseconds>(stop - start).count();
     // }
 
-    out << i << "," << avgSum / AVG_SAMPLE_SIZE << endl;
+    // out << i << "," << avgSum / AVG_SAMPLE_SIZE << endl;
     // avgSum = 0;
 
     // for (int j = 0; j < i; j++)
