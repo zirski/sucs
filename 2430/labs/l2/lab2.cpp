@@ -12,7 +12,7 @@
 using namespace std::chrono;
 using namespace std;
 
-const int NUM_TESTS = 100;
+const int NUM_TESTS = 30;
 const int AVG_SAMPLE_SIZE = 1000;
 
 // Iteratively populates a 2d array containing a
@@ -36,38 +36,38 @@ int main()
 
   ofstream out("tests.csv");
 
-  out << "degree,iterative(ns),recursive(ns)" << endl;
+  out << "degree,recursive(ns)" << endl;
   for (int i = 0; i < NUM_TESTS; i++) {
-    int avgSum = 0;
+    long long avgSum = 0;
+
+    // for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
+    //   auto start = high_resolution_clock::now();
+    //   triangle = iterativePascal(i);
+    //   auto stop = high_resolution_clock::now();
+
+    //   avgSum += duration_cast<nanoseconds>(stop - start).count();
+    // }
+
+    out << i << "," << avgSum / AVG_SAMPLE_SIZE << endl;
+    // avgSum = 0;
+
+    // for (int j = 0; j < i; j++)
+    //   delete[] triangle[j];
+    // delete[] triangle;
 
     for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
       auto start = high_resolution_clock::now();
-      triangle = iterativePascal(i);
+      triangle = recursivePascal(i);
       auto stop = high_resolution_clock::now();
 
       avgSum += duration_cast<nanoseconds>(stop - start).count();
     }
 
     out << i << "," << avgSum / AVG_SAMPLE_SIZE << endl;
-    avgSum = 0;
 
     for (int j = 0; j < i; j++)
       delete[] triangle[j];
     delete[] triangle;
-
-    // for (int j = 0; j < AVG_SAMPLE_SIZE; j++) {
-    //   auto start = high_resolution_clock::now();
-    //   triangle = recursivePascal(i);
-    //   auto stop = high_resolution_clock::now();
-
-    //   avgSum += duration_cast<nanoseconds>(stop - start).count();
-    // }
-
-    // out << avgSum / AVG_SAMPLE_SIZE << endl;
-
-    // for (int j = 0; j < i; j++)
-    //   delete[] triangle[j];
-    // delete[] triangle;
   }
 
   // cout << "Iterative Test: Please input the degree of the binomial: ";
