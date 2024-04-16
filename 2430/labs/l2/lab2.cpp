@@ -12,8 +12,8 @@
 using namespace std::chrono;
 using namespace std;
 
-const int NUM_TESTS = 51;
-const int AVG_SAMPLE_SIZE = 100000;
+const int NUM_TESTS = 100;
+const int AVG_SAMPLE_SIZE = 1000;
 
 // Iteratively populates a 2d array containing a
 // pascal's triangle, the width and height of the array being d elements wide
