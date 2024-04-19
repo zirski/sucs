@@ -139,7 +139,7 @@ int tennisBalls(int n)
   if (n == 1)
     return 1;
   else
-    return n + pow(sqrt(tennisBalls(n - 1)) + 1, 2);
+    return (n * n) + (tennisBalls(n - 1));
 }
 
 string decToBase2(int n)
