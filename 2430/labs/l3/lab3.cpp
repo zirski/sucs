@@ -1,19 +1,20 @@
-/*
-** Binary Search Tree Basic Operations
-** Lab 3, CPSC 2430
-*/
+#include <iostream>
+#include <string>
+
+using namespace std;
+
 class ShelterBST {
 private:
   struct Pet {
     string name;
     int age;
-    // add your constructor here
-    // ...
+    Pet(string name, int age) : name(name), age(age){};
   };
   struct TreeNode {
     Pet* pet;  // you must use a Pet pointer
     TreeNode* left;
     TreeNode* right;
+    TreeNode(Pet* pet) : pet(pet), left(nullptr), right(nullptr){};
   };
   TreeNode* root;
   // PRIVATE RECURSIVE FUNCTIONS
@@ -21,32 +22,54 @@ private:
   // No duplicate values (Pet ages) will be entered for this lab.
   TreeNode* insert(TreeNode* root, Pet* pet)
   {
-    // add your code here
-    // ...
+    if (root == nullptr)
+      root = new TreeNode(pet);
+    else if (pet->age < root->pet->age)
+      root->left = insert(root->left, pet);
+    else
+      root->right = insert(root->right, pet);
+    return root;
   }
   // Returns pointer to TreeNode that matches the given age
   // Nullptr if no match is found
   TreeNode* search(TreeNode* root, int age)
   {
-    // add your code here
-    // ...
+    if (root == nullptr)
+      return nullptr;
+    else if (root->pet->age == age)
+      return root;
+    else {
+      if (age < root->pet->age)
+        return search(root->left, age);
+      else
+        return search(root->right, age);
+    }
   }
   // The three traversals below will neatly print to screen
   // the Pets’ names and ages in the respective order
   void inorder(TreeNode* root)
   {
-    // add your code here
-    // ...
+    if (root != nullptr) {
+      inorder(root->left);
+      cout << root->pet->name << ", Age " << root->pet->age << endl;
+      inorder(root->right);
+    }
   }
   void preorder(TreeNode* root)
   {
-    // add your code here
-    // ...
+    if (root != nullptr) {
+      cout << root->pet->name << ", Age " << root->pet->age << endl;
+      inorder(root->left);
+      inorder(root->right);
+    }
   }
   void postorder(TreeNode* root)
   {
-    // add your code here
-    // ...
+    if (root != nullptr) {
+      inorder(root->left);
+      inorder(root->right);
+      cout << root->pet->name << ", Age " << root->pet->age << endl;
+    }
   }
 
 public:
@@ -61,9 +84,10 @@ public:
   void searchPet(int age)
   {
     TreeNode* result = search(root, age);
-    // display name of pet found or
-    // message if not found
-    // ...
+    if (result == nullptr)
+      cout << "Error: pet not found." << endl;
+    else
+      cout << result->pet->name << endl;
   }
   void inorderDisplay()
   {
@@ -87,18 +111,30 @@ int main()
   ShelterBST tree;
   // insert 10 pets, for example: (this syntax may be different
   // depending on how you design your constructors)
-  tree.insertNode(“Zelda”, 5);
-  tree.insertNode(“Link”, 7);
-  // etc ...
+  tree.insertPet("Zelda", 5);
+  tree.insertPet("Link", 7);
+  tree.insertPet("Lillard", 3);
+  tree.insertPet("Jordan", 7);
+  tree.insertPet("Bird", 9);
+  tree.insertPet("Tars", 20);
+  tree.insertPet("Case", 7);
+  tree.insertPet("Lamelo", 2);
+  tree.insertPet("Kyle", 11);
+  tree.insertPet("Kipp", 5);
   // inorder display
+  cout << "-*- Inorder Display -*-" << endl;
   tree.inorderDisplay();
   // preorder display
+  cout << "-*- Preorder Display -*-" << endl;
   tree.preorderDisplay();
   // postorder display
+  cout << "-*- Postorder Display -*-" << endl;
   tree.postorderDisplay();
   // successful search
+  cout << "searching for pet of age 7:" << endl;
   tree.searchPet(7);
   // unsuccessful search
+  cout << "searching for pet of age 100:" << endl;
   tree.searchPet(100);  // assuming no Pet in your tree is aged 100
   return 0;
 }
