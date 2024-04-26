@@ -59,15 +59,15 @@ private:
   {
     if (root != nullptr) {
       cout << root->pet->name << ", Age " << root->pet->age << endl;
-      inorder(root->left);
-      inorder(root->right);
+      preorder(root->left);
+      preorder(root->right);
     }
   }
   void postorder(TreeNode* root)
   {
     if (root != nullptr) {
-      inorder(root->left);
-      inorder(root->right);
+      postorder(root->left);
+      postorder(root->right);
       cout << root->pet->name << ", Age " << root->pet->age << endl;
     }
   }
