@@ -3,6 +3,7 @@
 ** Lab 4, CPSC 2430
 */
 #include <chrono>
+#include <cstddef>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
@@ -39,7 +40,7 @@ public:
 
   ~PetHeap()
   {
-    for (int i = 0; i < petHeap.size(); i++)
+    for (size_t i = 0; i < petHeap.size(); i++)
       delete petHeap[i];
   }
   void insert(Pet* pet);
@@ -62,8 +63,8 @@ void PetHeap::percolateUp(int index)
 
 void PetHeap::percolateDown(int index)
 {
-  int r = index * 2 + 1;
-  int l = index * 2 + 2;
+  size_t r = index * 2 + 1;
+  size_t l = index * 2 + 2;
   if (r < petHeap.size()) {
     int lesserChild = (petHeap[r]->arrival < petHeap[l]->arrival) ? r : l;
     if (petHeap[lesserChild]->arrival < petHeap[index]->arrival) {
@@ -121,7 +122,7 @@ int PetHeap::numPets()
 
 void PetHeap::displayPets()
 {
-  for (int i = 0; i < petHeap.size(); i++) {
+  for (size_t i = 0; i < petHeap.size(); i++) {
     auto currentTime = system_clock::to_time_t(petHeap[i]->arrival);
     cout << left << setw(7) << petHeap[i]->name << " " << ctime(&currentTime)
          << endl;
