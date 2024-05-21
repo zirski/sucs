@@ -33,6 +33,7 @@
 
 # Misc
 *.dat
+*.csv
 .DS_Store
 heap_test/heap_test.cpp
 merge_sort_test.cpp
