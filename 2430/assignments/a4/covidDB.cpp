@@ -1,6 +1,5 @@
 #include "covidDB.h"
 
-#include <cstddef>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -13,7 +12,7 @@ int CovidDB::hash(string name)
 {
   int sum = 0;
 
-  for (int i = 0; i < name.size(); i++)
+  for (size_t i = 0; i < name.size(); i++)
     sum += (i + 1) * name[i];
   return sum % TABLE_SIZE;
 }
@@ -21,14 +20,14 @@ int CovidDB::hash(string name)
 CovidDB::~CovidDB()
 {
   for (int i = 0; i < TABLE_SIZE; i++)
-    for (int j = 0; j < table[i].size(); j++)
+    for (size_t j = 0; j < table[i].size(); j++)
       delete table[i][j];
 }
 
 bool CovidDB::add(DataEntry*& entry)
 {
   int h_index = hash(entry->getCountry());
-  for (int i = 0; i < table[h_index].size(); i++) {
+  for (size_t i = 0; i < table[h_index].size(); i++) {
     DataEntry* ref = table[h_index][i];
     if (ref->getCountry() == entry->getCountry()) {
       string c_date = ref->getDate();
@@ -49,7 +48,7 @@ bool CovidDB::add(DataEntry*& entry)
 CovidDB::DataEntry* CovidDB::get(string country)
 {
   int key = hash(country);
-  for (int i = 0; i < table[key].size(); i++)
+  for (size_t i = 0; i < table[key].size(); i++)
     if (table[key][i]->getCountry() == country)
       return table[key][i];
   return nullptr;
@@ -58,7 +57,7 @@ CovidDB::DataEntry* CovidDB::get(string country)
 void CovidDB::remove(string country)
 {
   int key = hash(country);
-  for (int i = 0; i < table[key].size(); i++)
+  for (size_t i = 0; i < table[key].size(); i++)
     if (table[key][i]->getCountry() == country) {
       table[key].erase(table[key].begin() + i);
       return;
@@ -70,7 +69,7 @@ void CovidDB::displayTable()
   cout << left << setw(47) << "|Country" << setw(23) << "|Date of Latest Entry"
        << setw(10) << "|Cases" << setw(10) << "|Deaths" << endl;
   for (int i = 0; i < TABLE_SIZE; i++)
-    for (int j = 0; j < table[i].size(); j++)
+    for (size_t j = 0; j < table[i].size(); j++)
       cout << left << setw(47) << table[i][j]->getCountry() << setw(23)
            << table[i][j]->getDate() << setw(10) << table[i][j]->get_c_cases()
            << setw(10) << table[i][j]->get_c_deaths() << endl;
