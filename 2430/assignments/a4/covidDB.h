@@ -7,6 +7,7 @@
 using namespace std;
 
 static const int TABLE_SIZE = 17;
+static const int STRING_DATE_SIZE = 10;
 
 class CovidDB {
 public:
@@ -46,10 +47,15 @@ public:
     {
       c_deaths += deaths;
     }
+    void setDate(string newDate)
+    {
+      date = newDate;
+    }
   };
   // inserts one entry into the hash table. Returns true if record is added,
   // false if rejected.
-  bool add(DataEntry* entry);
+  // Pre: entry.date must be formatted correctly (mm/dd/yyyy)
+  bool add(DataEntry*& entry);
   // Returns entry with specified name. Returns nullptr if no such entry exists.
   DataEntry* get(string country);
   // Removes entry with specified name.
@@ -60,6 +66,9 @@ public:
 
 private:
   vector<DataEntry*> table[TABLE_SIZE];
+  // Returns true if test is equal to or later than ref
+  bool valiDATE(string ref, string test);
+  string sanitize_date(string date);
 };
 
 #endif

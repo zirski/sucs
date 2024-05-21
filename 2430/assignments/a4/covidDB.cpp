@@ -1,7 +1,9 @@
 #include "covidDB.h"
 
 #include <cstddef>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -19,92 +21,107 @@ int CovidDB::hash(string name)
 CovidDB::~CovidDB()
 {
   for (int i = 0; i < TABLE_SIZE; i++)
-    for (DataEntry* d : table[i])
-      delete d;
+    for (int j = 0; j < table[i].size(); j++)
+      delete table[i][j];
 }
 
-bool CovidDB::add(DataEntry* entry)
+bool CovidDB::add(DataEntry*& entry)
 {
   int h_index = hash(entry->getCountry());
-  vector<DataEntry*> chain = table[h_index];
-  for (int i = 0; i < chain.size(); i++) {
-    if (chain[i]->getCountry() == entry->getCountry()) {
-      // Date format: mm/dd/yyyy
-      // 0 1 2 3 4 5 6 7 8 9 l
-      // m m / d d / y y y y
-      string c_date = chain[i]->getDate();
-      int c_y = stoi(c_date.substr(c_date.length() - 4));
-      int e_y = stoi(entry->getDate().substr(entry->getDate().length() - 4));
-
-      if (e_y < c_y)
-        return false;
-      else if (e_y > c_y) {
-        chain[i]->inc_c_cases(entry->get_c_cases());
-        chain[i]->inc_c_deaths(entry->get_c_deaths());
-        cout << "1" << endl;
+  for (int i = 0; i < table[h_index].size(); i++) {
+    DataEntry* ref = table[h_index][i];
+    if (ref->getCountry() == entry->getCountry()) {
+      string c_date = ref->getDate();
+      string e_date = entry->getDate();
+      if (valiDATE(c_date, e_date)) {
+        ref->inc_c_cases(entry->get_c_cases());
+        ref->inc_c_deaths(entry->get_c_deaths());
+        ref->setDate(entry->getDate());
         return true;
-      } else {
-        int c_m = stoi(c_date.substr(c_date.length() - 7, 2));
-        int e_m =
-            stoi(entry->getDate().substr(entry->getDate().length() - 7, 2));
-        if (e_m < c_m)
-          return false;
-        else if (e_m > c_m) {
-          chain[i]->inc_c_cases(entry->get_c_cases());
-          chain[i]->inc_c_deaths(entry->get_c_deaths());
-          cout << "2" << endl;
-          return true;
-        } else {
-          int c_d = stoi(c_date.substr(0, 2));
-          int e_d = stoi(entry->getDate().substr(0, 2));
-
-          if (e_d < c_d)
-            return false;
-          else if (e_d >= c_d) {
-            chain[i]->inc_c_cases(entry->get_c_cases());
-            chain[i]->inc_c_deaths(entry->get_c_deaths());
-            cout << "3" << endl;
-            return true;
-          }
-        }
-      }
+      } else
+        return false;
     }
   }
-  chain.push_back(entry);
-  cout << "4" << endl;
+  table[h_index].push_back(entry);
   return true;
 }
 
 CovidDB::DataEntry* CovidDB::get(string country)
 {
   int key = hash(country);
-  auto it = table[key].begin();
-  while (it != table[key].end()) {
-    if ((*it)->getCountry() == country)
-      return *it;
-    it++;
-  }
+  for (int i = 0; i < table[key].size(); i++)
+    if (table[key][i]->getCountry() == country)
+      return table[key][i];
   return nullptr;
 }
 
 void CovidDB::remove(string country)
 {
   int key = hash(country);
-  for (auto it = table[key].begin(); it != table[key].end(); it++) {
-    if ((*it)->getCountry() == country) {
-      table[key].erase(it);
+  for (int i = 0; i < table[key].size(); i++)
+    if (table[key][i]->getCountry() == country) {
+      table[key].erase(table[key].begin() + i);
       return;
     }
-  }
 }
 
 void CovidDB::displayTable()
 {
+  cout << left << setw(47) << "|Country" << setw(23) << "|Date of Latest Entry"
+       << setw(10) << "|Cases" << setw(10) << "|Deaths" << endl;
   for (int i = 0; i < TABLE_SIZE; i++)
-    cout << table[i].size() << " " << endl;
-  // for (int j = 0; j < table[i].size(); j++)
-  //   cout << hash(table[i][j]->getCountry()) << ", " << table[i][j]->getDate()
-  //        << ", " << table[i][j]->getCountry() << ", "
-  //        << table[i][j]->get_c_cases() << ", " << table[i][j]->get_c_deaths()
-  //        << endl;
+    for (int j = 0; j < table[i].size(); j++)
+      cout << left << setw(47) << table[i][j]->getCountry() << setw(23)
+           << table[i][j]->getDate() << setw(10) << table[i][j]->get_c_cases()
+           << setw(10) << table[i][j]->get_c_deaths() << endl;
+}
+
+bool CovidDB::valiDATE(string ref, string test)
+{
+  // Date format: mm/dd/yy
+  // 0 1 2 3 4 5 6 7 l
+  // m m / d d / y y
+  ref = sanitize_date(ref);
+  test = sanitize_date(test);
+
+  int ry, ty, rm, tm, rd, td;
+  ry = stoi(ref.substr(6));
+  ty = stoi(test.substr(6));
+  rd = stoi(ref.substr(3, 2));
+  td = stoi(test.substr(3, 2));
+  rm = stoi(ref.substr(0, 2));
+  tm = stoi(test.substr(0, 2));
+
+  if (ty < ry)
+    return false;
+  else if (ty > ry)
+    return true;
+  // if years are equal
+  else {
+    if (tm < rm)
+      return false;
+    else if (tm > rm)
+      return true;
+    // if months are equal
+    else {
+      if (td < rd)
+        return false;
+      else
+        return true;
+    }
+  }
+}
+
+string CovidDB::sanitize_date(string date)
+{
+  stringstream ss(date);
+  vector<string> tkns;
+  string tkn;
+  while (getline(ss, tkn, '/'))
+    tkns.push_back(tkn);
+  if (tkns[0].size() == 1)
+    tkns[0] = "0" + tkns[0];
+  if (tkns[1].size() == 1)
+    tkns[1] = "0" + tkns[1];
+  return tkns[0] + "/" + tkns[1] + "/" + tkns[2];
 }
