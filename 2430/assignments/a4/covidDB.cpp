@@ -103,7 +103,7 @@ bool CovidDB::valiDATE(string ref, string test)
       return true;
     // if months are equal
     else {
-      if (td < rd)
+      if (td <= rd)
         return false;
       else
         return true;
