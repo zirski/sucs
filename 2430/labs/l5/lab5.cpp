@@ -1,10 +1,19 @@
+#include <algorithm>
 #include <chrono>
 #include <exception>
+#include <iomanip>
 #include <iostream>
 #include <random>
 #include <vector>
 
 using namespace std;
+
+void heapSort(int* A, int n);
+void mergeSort(int* A, int i, int n);
+void merge(int* A, int p, int q, int r);
+void quickSort(int* A, int n);
+void printArray(int* A, int n);
+void measureSort(void (*sortingFunction)(int*, int));
 
 class MinHeap {
 public:
@@ -77,27 +86,56 @@ void heapSort(int* A, int n)
     }
   }
 }
-void mergeSort(int* A, int n)
-{
-  vector<int> left;
-  vector<int> right;
 
-  for (int i = 0; i < n; i++)
-    if (i < n / 2)
-      left.push_back(A[i]);
-    else
-      right.push_back(A[i]);
+void mergeSort(int* A, int i, int n)
+{
+  if (i < n) {
+    int mid = (i + n) / 2;
+    mergeSort(A, i, mid);
+    mergeSort(A, mid + 1, n);
+    merge(A, i, mid, n);
+  }
 }
+
+// p: start index
+// q: middle index (end of first unsorted array)
+// q: end index
+void merge(int* A, int p, int q, int r)
+{
+  int* tmp = new int[r - p + 1];
+  int i = p;
+  int j = q + 1;
+
+  int index = 0;
+  while (i <= q && j <= r) {
+    if (A[i] < A[j])
+      tmp[index++] = A[i++];
+    else
+      tmp[index++] = A[j++];
+  }
+
+  while (i <= q)
+    tmp[index++] = A[i++];
+  while (j <= r)
+    tmp[index++] = A[j++];
+
+  index = 0;
+  for (int k = p; k <= r; k++)
+    A[k] = tmp[index++];
+}
+
 void quickSort(int* A, int n)
 {
   // quick sort
 }
+
 void printArray(int* A, int n)
 {
   for (int i = 0; i < n; i++)
     cout << A[i] << " ";
   cout << endl;
 }
+
 void measureSort(void (*sortingFunction)(int*, int))
 {
   int size[] = {10, 100, 1000, 10000, 100000};
@@ -145,12 +183,12 @@ int main()
 
   for (int i = 0; i < size; i++) {
     arr[i] = distribute(g);
-    cout << arr[i] << " ";
+    cout << setw(2) << arr[i] << " ";
   }
   cout << endl;
-  heapSort(arr, size);
+  mergeSort(arr, 0, size);
   for (int i = 0; i < size; i++)
-    cout << arr[i] << " ";
+    cout << setw(2) << arr[i] << " ";
   cout << endl;
 
   // // function pointer
