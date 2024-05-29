@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <chrono>
 #include <exception>
 #include <iomanip>
@@ -9,11 +8,16 @@
 using namespace std;
 
 void heapSort(int* A, int n);
-void mergeSort(int* A, int i, int n);
+void mergeSort(int* A, int i, int j);
+void mergeSort(int* A, int n);
 void merge(int* A, int p, int q, int r);
-void quickSort(int* A, int n);
 void printArray(int* A, int n);
 void measureSort(void (*sortingFunction)(int*, int));
+void quickSort(int* A, int n);
+void quickSort(int* A, int i, int j);
+int partition(int* A, int i, int j);
+int randomized_partition(int* A, int i, int j);
+void swap(int& a, int& b);
 
 class MinHeap {
 public:
@@ -69,6 +73,13 @@ private:
   }
 };
 
+void swap(int& a, int& b)
+{
+  int tmp = a;
+  a = b;
+  b = tmp;
+}
+
 // different sorting algorithms defined here
 // add other functions as needed
 void heapSort(int* A, int n)
@@ -87,14 +98,19 @@ void heapSort(int* A, int n)
   }
 }
 
-void mergeSort(int* A, int i, int n)
+void mergeSort(int* A, int i, int j)
 {
-  if (i < n) {
-    int mid = (i + n) / 2;
+  if (i < j) {
+    int mid = (i + j) / 2;
     mergeSort(A, i, mid);
-    mergeSort(A, mid + 1, n);
-    merge(A, i, mid, n);
+    mergeSort(A, mid + 1, j);
+    merge(A, i, mid, j);
   }
+}
+
+void mergeSort(int* A, int n)
+{
+  mergeSort(A, 0, n);
 }
 
 // p: start index
@@ -124,9 +140,38 @@ void merge(int* A, int p, int q, int r)
     A[k] = tmp[index++];
 }
 
+void quickSort(int* A, int i, int j)
+{
+  if (i < j) {
+    int p = randomized_partition(A, i, j);
+    quickSort(A, i, p - 1);
+    quickSort(A, p + 1, j);
+  }
+}
+
 void quickSort(int* A, int n)
 {
-  // quick sort
+  quickSort(A, 0, n);
+}
+
+int partition(int* A, int low, int high)
+{
+  int p = A[high];
+  int i = low - 1;
+  for (int j = low; j <= high; j++)
+    if (A[j] < p) {
+      i++;
+      swap(A[j], A[i]);
+    }
+  swap(A[i + 1], A[high]);
+  return (i + 1);
+}
+
+int randomized_partition(int* A, int i, int j)
+{
+  int pos = i + rand() % (j - i + 1);
+  swap(A[i], A[pos]);
+  return partition(A, i, j);
 }
 
 void printArray(int* A, int n)
@@ -168,38 +213,38 @@ void measureSort(void (*sortingFunction)(int*, int))
     }
     // display the time measurement with units
     cout << "Array size " << size[i] << " duration: ";
-    cout << duration << " ns.";
+    cout << duration << " ns." << endl;
     delete[] array;
   }
 }
 
 int main()
 {
-  int size = 30;
-  int* arr = new int[size];
-  random_device r;
-  mt19937 g(r());
-  uniform_int_distribution<> distribute(1, 20);
+  // int size = 30;
+  // int* arr = new int[size];
+  // random_device r;
+  // mt19937 g(r());
+  // uniform_int_distribution<> distribute(1, 20);
 
-  for (int i = 0; i < size; i++) {
-    arr[i] = distribute(g);
-    cout << setw(2) << arr[i] << " ";
-  }
-  cout << endl;
-  mergeSort(arr, 0, size);
-  for (int i = 0; i < size; i++)
-    cout << setw(2) << arr[i] << " ";
-  cout << endl;
+  // for (int i = 0; i < size; i++) {
+  //   arr[i] = distribute(g);
+  //   cout << setw(2) << arr[i] << " ";
+  // }
+  // cout << endl;
+  // quickSort(arr, 0, size);
+  // for (int i = 0; i < size; i++)
+  //   cout << setw(2) << arr[i] << " ";
+  // cout << endl;
 
-  // // function pointer
-  // void (*sortingFunction)(int*, int);
-  // cout << endl << "HEAP SORT" << endl;
-  // sortingFunction = &heapSort;
-  // measureSort(sortingFunction);
-  // cout << endl << "MERGE SORT" << endl;
-  // sortingFunction = &mergeSort;
-  // measureSort(sortingFunction);
-  // cout << endl << "QUICK SORT" << endl;
-  // sortingFunction = &quickSort;
-  // measureSort(sortingFunction);
+  // function pointer
+  void (*sortingFunction)(int*, int);
+  cout << endl << "HEAP SORT" << endl;
+  sortingFunction = &heapSort;
+  measureSort(sortingFunction);
+  cout << endl << "MERGE SORT" << endl;
+  sortingFunction = &mergeSort;
+  measureSort(sortingFunction);
+  cout << endl << "QUICK SORT" << endl;
+  sortingFunction = &quickSort;
+  measureSort(sortingFunction);
 }
