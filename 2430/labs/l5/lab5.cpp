@@ -53,14 +53,14 @@ private:
   }
   void percolate_down(int i)
   {
-    if (i * 2 + 2 < arr.size()) {
+    if (i * 2 + 2 < (int)arr.size()) {
       int lesserChildIndex =
           (arr[i * 2 + 1] < arr[i * 2 + 2]) ? i * 2 + 1 : i * 2 + 2;
       if (arr[lesserChildIndex] < arr[i]) {
         swap(arr[lesserChildIndex], arr[i]);
         percolate_down(lesserChildIndex);
       }
-    } else if (i * 2 + 1 < arr.size() && arr[i * 2 + 1] < arr[i]) {
+    } else if (i * 2 + 1 < (int)arr.size() && arr[i * 2 + 1] < arr[i]) {
       swap(arr[i * 2 + 1], arr[i]);
       percolate_down(i * 2 + 1);
     }
