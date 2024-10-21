@@ -1,0 +1,38 @@
+# Toby Hammond
+# rangesum.ac
+# finds sum of all integers between (inclusive) two inputs
+
+# r1: input1
+# r2: input2
+# r3: helper
+# r4: lower limit
+# r5: upper limit
+# r6: loop test variable (-/+)
+# r7: output
+
+            in r1
+            in r2
+            # takes difference between inputs
+            sub r3 r1 r2
+            add r7 r0 r1
+            # if both numbers are the same, skip and print
+            beq r3 &end
+            # assigns appropriate lo and hi limits for loop
+            blt r3 &neg 
+            beq r0 &pos
+neg:        add r4 r0 r1 
+            add r5 r0 r2
+            beq r0 &init
+pos:        add r4 r0 r2
+            add r5 r0 r1
+            # initializes output to smaller input
+init:       add r7 r0 r4
+            # loop structure: increments r4, adds new value of r4 to r7, then tests
+            # to see if r4 = r5. If not, keep adding to r7 until our range sum has
+            # been correctly calculated.
+loop:       addi r4 r4 1
+            add r7 r7 r4
+            sub r6 r4 r5
+            blt r6 &loop
+end:        out r7
+            .halt

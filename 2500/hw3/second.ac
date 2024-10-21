@@ -1,0 +1,45 @@
+# Toby Hammond
+# second.ac
+# continuously requests values, then after user inputs a negative number 
+# returns the second-greates value entered. This program only stores the 
+# greatest and second-greatest values and forgets the rest
+
+# r1: input
+# r2: second-greatest input
+# r3: greatest input
+# r4: control flow test variable
+
+                  # init variables
+                  lli r1 0
+                  lli r2 0
+                  lli r3 0
+while:            blt r1 &break
+                  in r1
+                  sub r4 r1 r3
+                  # 3 conditions: 
+                  # greatest: input is greater than any previous one 
+                  #     -> greatest = input, second-greatest = greatest
+                  # second_greatest: input is either equal to greatest or 
+                  # greater than second-greatest 
+                  #     -> second-greatest = input
+                  bgt r4 &greatest
+                  beq r4 &sec_greatest
+                  sub r4 r1 r2
+                  bgt r4 &sec_greatest
+                  beq r0 &while
+greatest:         add r2 r0 r3
+                  add r3 r0 r1
+                  beq r0 &while
+sec_greatest:     add r2 r0 r1
+                  beq r0 &while
+break:            sub r4 r1 r2
+                  # if input < 0 and is equal to second-greatest, only one 
+                  # positive integer has been entered and thus program 
+                  # outputs 0.
+                  beq r3 &output_zero
+                  # otherwise output second-greatest.
+                  out r2
+                  .halt
+output_zero:      out r4
+                  .halt
+
