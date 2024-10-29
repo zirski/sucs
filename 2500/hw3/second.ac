@@ -7,7 +7,6 @@
 # r1: input
 # r2: second-greatest input
 # r3: greatest input
-# r4: multi-purpose
 
                   # init variables
                   lli r1 0

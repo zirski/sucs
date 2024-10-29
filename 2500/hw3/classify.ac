@@ -11,39 +11,40 @@
 # r6: gen-purpose ptr
 # r7: mutated array address (to access indices)
 
-# code
               in r1
               # output digits if input < 0
 mainloop:     blt r1 &output
               # initialize indexer
-              addi r2 r0 0
+              lli r2 0
               lli r6 &limits
               lui r6 &limits
-              # increment r6 to point to correct index, then load that index 
-              # into r4
+              # r7 = &(r6[r2])
 sorter:       add r7 r6 r2
               lw r4 r7 0
               sub r5 r1 r4
+              # if r5 is less than r4 (upper limit of first range), move on
               bgt r5 &incr
-              # reads value of appropriate digit and increments
+              # read value of appropriate digit, increment, then store
               lli r6 &digits
               lui r6 &digits
-              # same mechanism as line 24
               add r7 r6 r2
               lw r4 r7 0
               addi r4 r4 1
               sw r4 r7 0
+              # having input down here means negative value processing is
+              # faster
               in r1
               beq r0 &mainloop
 incr:         addi r2 r2 1
               beq r0 &sorter
-              # load each element from digits and outputs
+              # load each element from digits[] and output
 output:       lli r6 &digits
               lui r6 &digits
               # reset loop variables
-              addi r2 r0 0
-              addi r3 r0 4
+              lli r2 0
+              lli r3 4
 outputloop:   add r7 r6 r2
+              # load val @ r7 r6[r2] into r4
               lw r4 r7 0
               out r4
               # loop test

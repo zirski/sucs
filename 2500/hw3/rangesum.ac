@@ -16,7 +16,7 @@
             sub r3 r1 r2
             add r7 r0 r1
             # if both numbers are the same, skip and print
-            beq r3 &end
+            beq r3 &output
             # assigns appropriate lo and hi limits for loop
             blt r3 &neg 
             beq r0 &pos
@@ -34,5 +34,5 @@ loop:       addi r4 r4 1
             add r7 r7 r4
             sub r6 r4 r5
             blt r6 &loop
-end:        out r7
+output:     out r7
             .halt
