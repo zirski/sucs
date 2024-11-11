@@ -1,0 +1,130 @@
+# Toby Hammond
+# list.ac
+# Linked-list of integers. User can insert to the front or back of the list, 
+# as well as search for a value.
+
+# Activation record for main:
+# 0. Node* root
+
+            # Stack setup
+            lli r6 0x00
+            lui r6 0x80
+            addi r7 r6 1
+
+            # Node* root = nullptr
+            sw r0 r6 0
+
+            lli r1 3
+            sw r0 r7 1
+            sw r1 r7 2
+
+            # new pointer at front (val: 3)
+            lli r1 &addFront
+            lui r1 &addFront
+            jalr r1 r5
+
+            # root = addFront()
+            sw r4 r6 0
+
+            # new pointer at front (val: 5)
+            lli r1 5
+            sw r1 r7 2
+            lw r1 r6 0
+            sw r1 r7 1
+
+            lli r1 &addFront
+            lui r1 &addFront
+            jalr r1 r5
+
+            sw r4 r6 0
+
+            # DEBUG
+            lw r1 r6 0
+            lw r1 r1 1
+            out r1
+
+            # list: node1(5)->node2(3)
+
+            # search for node 3 (should return 2)
+            lw r1 r6 0
+            sw r1 r7 1
+            addi r1 r0 5
+            sw r1 r7 2
+
+            lli r1 &search
+            lui r1 &search
+            jalr r1 r5
+
+            out r4
+            .halt
+
+# Activation record:
+# 0. prev. fp
+# 1. Node* head
+# 2. int val
+# 3. Node* ins
+
+
+addFront:   sw r6 r7 0
+            addi r6 r7 0
+            addi r7 r7 4
+
+            lli r2 &heapPtr
+            lui r2 &heapPtr
+
+            # r1 = new data (&heapPtr)
+            lw r1 r2 0
+            # increment *heapPtr and store new value in &heapPtr
+            addi r3 r1 2
+            sw r3 r2 0
+
+            # ins->data = val
+            lw r3 r6 2
+            sw r3 r1 0
+            # ins->next = nullptr
+            sw r0 r1 1
+
+            lw r3 r6 1
+            beq r3 &end1
+            sw r3 r1 1
+end1:       addi r4 r1 0
+            # stack cleanup
+            addi r7 r6 0
+            lw r6 r7 0
+            jalr r5 r0
+
+# Activation record:
+# 0. prev. fp
+# 1. Node* head
+# 2. int val
+
+search:     sw r6 r7 0
+            addi r6 r7 0
+            addi r7 r7 3
+
+            # r1 = head
+            lw r1 r6 1
+            # r2 = counter
+            addi r2 r0 1
+            # r3 = val
+            lw r3 r6 2
+while:      beq r1 &break
+            lw r4 r1 0
+            sub r4 r4 r3
+            beq r4 &break
+            lw r1 r1 1
+            addi r2 r2 1
+            beq r0 &while
+break:      beq r1 &else
+            addi r4 r2 0
+            beq r0 &end2
+else:       lli r4 0
+            # stack cleanup
+end2:       addi r7 r6 0
+            lw r6 r7 0
+            jalr r5 r0
+
+
+# heap
+heapPtr:    .fill &heap
+heap:       .fill 0
