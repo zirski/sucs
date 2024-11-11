@@ -1,0 +1,126 @@
+# Activation record for main:
+# 0. a
+# 1. b
+# 2. c
+# 3. total
+
+main:   lli r6 0x00	
+        lui r6 0x80	# initialize frame pointer
+        addi r7 r6 4	# initialize stack pointer
+
+        lli r1 2		
+        sw r1 r6 0	# a = 2;
+        lli r1 3	
+        sw r1 r6 1	# b = 3;
+        lli r1 4	
+        sw r1 r6 2	# c = 4;
+
+# Calling foo(a, b, c)
+        lw r1 r6 0
+        sw r1 r7 1	# a -> offset 1
+        lw r1 r6 1
+        sw r1 r7 2	# b -> offset 2
+        lw r1 r6 2
+        sw r1 r7 3	# c -> offset 3
+
+        lli r1 &foo
+        lui r1 &foo
+        jalr r1 r5
+
+# total = <return value from foo (r4)>
+        sw r4 r6 3
+
+# Calling bar(b, c)
+        lw r1 r6 1
+        sw r1 r7 1	# b -> offset 1
+        lw r1 r6 2
+        sw r1 r7 2	# c -> offset 2
+
+        lli r1 &bar
+        lui r1 &bar
+        jalr r1 r5
+
+# total = total + <return val from foo (r4)>
+        lw r1 r6 3
+        add r1 r1 r4
+        sw r1 r6 3 
+
+# cout << total (total currently in r1)
+        out r1
+
+# end of main
+        .halt
+
+
+# Activation record for bar
+# 0. prev frame pointer
+# 1. parameter a
+# 2. parameter b
+# c will be stored in r3
+
+bar:    sw r6 r7 0	# store prev frame ptr
+        addi r6 r7 0	# move frame ptr to stack ptr
+        addi r7 r7 4	# move stack ptr to end
+
+# c = a + b
+        lw r1 r6 1
+        lw r2 r6 2
+        add r3 r1 r2
+
+# return c + 2
+        addi r4 r3 2	# c + 2 -> r4 (return val)
+
+        addi r7 r6 0	# move stack ptr to frame ptr
+        lw r6 r7 0	# load prev frame ptr
+        jalr r5 r0	# return
+
+
+# Activation record for foo
+# 0. prev frame pointer
+# 1. parameter x
+# 2. parameter y
+# 3. parameter z
+# 4. sum1
+# 5. sum2
+# 6. return address
+
+foo:    sw r6 r7 0	# store prev frame ptr
+        addi r6 r7 0	# move frame ptr to stack ptr
+        addi r7 r7 7	# move stack ptr to end
+        sw r5 r6 6	# save return address
+
+# call bar(x, y)
+        lw r1 r6 1
+        sw r1 r7 1 # x -> offset 1
+        lw r1 r6 2
+        sw r1 r7 2 # y -> offset 2
+
+        lli r1 &bar
+        lui r1 &bar
+        jalr r1 r5
+
+# sum1 = <return value from bar (r4)>
+        sw r4 r6 4
+
+# call bar(y, z)
+        lw r1 r6 2
+        sw r1 r7 1 # y -> offset 1
+        lw r1 r6 3
+        sw r1 r7 2 # z -> offset 2
+
+        lli r1 &bar
+        lui r1 &bar
+        jalr r1 r5
+
+# sum2 = <return value from bar (r4)>
+        sw r4 r6 5
+
+# return sum1 + sum2
+        lw r1 r6 4
+        lw r2 r6 5
+        add r4 r1 r2 	# sum1 + sum2 -> r4
+
+        lw r5 r6 6	# restore return address
+        addi r7 r6 0	# move stack ptr to frame ptr
+        lw r6 r7 0	# load prev frame ptr
+        jalr r5 r0	# return
